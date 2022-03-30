@@ -38,3 +38,6 @@ sysinfo.txt
 *.unitypackage
 *.log
 .vsconfig
+*.txt
+UserSettings/AndroidLogcatSettings.asset
+*.dwlt
