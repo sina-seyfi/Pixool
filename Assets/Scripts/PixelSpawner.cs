@@ -4,41 +4,57 @@ using UnityEngine;
 
 public class PixelSpawner : MonoBehaviour
 {
+    private double gap = 0.2f;
+    private double screenMarginLeft = 10;
+    private double screenMarginRight = 10;
     [SerializeField]
-    private double gapMultiplier = 0.2f;
+    private CameraFit CameraFit;
     [SerializeField]
-    private int marginLeft = 10;
+    private GameObject pixelPrefab;
     [SerializeField]
-    private int marginRight = 10;
-    [SerializeField]
-    private CameraFit cameraFit;
-    [SerializeField]
-    private int rows = 10;
-    [SerializeField]
-    private int cols = 10;
-    [SerializeField]
-    private GameObject pixel;
-    // Start is called before the first frame update
+    private Texture2D dog;
     void Start()
     {
-        double rowWidthUnit = cols + ((cols - 1) * gapMultiplier) + marginLeft + marginRight;
-        double unitScale = cameraFit.sceneWidth / rowWidthUnit;
-        Debug.Log("UnitScale: " + unitScale);
-        Debug.Log("Something happened");
-        for(int i = 0; i < rows; i++) {
-            double yPos = i * unitScale;
-            if(i >= 1) yPos += i * gapMultiplier * unitScale;
-            double parentYPos = convertYPositionToParentPosition(yPos, rows, unitScale, gapMultiplier);
-            for(int j = 0; j < cols; j++) {
-                double xPos = j * unitScale;
-                if(j >= 1) xPos += j * gapMultiplier * unitScale;
-                double parentXPos = convertXPositionToParentPosition(xPos, cols, unitScale, gapMultiplier);
-                GameObject go = Instantiate(pixel);
-                go.transform.localScale = new Vector3((float) unitScale, (float) unitScale);
-                go.transform.parent = gameObject.transform;
-                go.transform.position = new Vector3((float) parentXPos, (float) parentYPos, 0f);
-            }
+        var pixels = dog.GetPixels32(0);
+        var root = Mathf.Sqrt(pixels.Length);
+        var _2dArray = new PixelColor[(int) root, pixels.Length / (int) root];
+        for(int i = 0; i < pixels.Length; i++) {
+            _2dArray[i / (int) root, i % (int) root] = new PixelColor() { Color = pixels[i] };
 		}
+        Spawn(_2dArray);;
+    }
+
+    public void Spawn(PixelData[,] pixelsData) {
+        int rows = pixelsData.GetLength(0);
+        int cols = pixelsData.GetLength(1);
+        double rowWidthUnit = cols + ((cols - 1) * gap) + screenMarginLeft + screenMarginRight;
+        double unitScale = CameraFit.sceneWidth / rowWidthUnit;
+        for(int row = 0; row < rows; row++) {
+            double yPos = row * unitScale;
+            if(row >= 1) yPos += row * gap * unitScale;
+            double parentYPos = convertYPositionToParentPosition(yPos, rows, unitScale, gap);
+            for(int col = 0; col < cols; col++) {
+                double xPos = col * unitScale;
+                if(col >= 1) xPos += col * gap * unitScale;
+                double parentXPos = convertXPositionToParentPosition(xPos, cols, unitScale, gap);
+                Vector3 scale = new Vector3((float) unitScale, (float) unitScale);
+                Transform parent = gameObject.transform;
+                Vector3 position = new Vector3((float) parentXPos, (float) parentYPos, 0f);
+                GameObject go = createPixel(scale, parent, position);
+                Pixel pixel = go.GetComponent<Pixel>();
+                if(pixel != null) {
+                    pixel.Data = pixelsData[row, col];
+				}
+            }
+        }
+    }
+
+    private GameObject createPixel(Vector3 scale, Transform parent, Vector3 position) {
+        GameObject pixel = Instantiate(pixelPrefab);
+        pixel.transform.localScale = scale;
+        pixel.transform.parent = parent;
+        pixel.transform.position = position;
+        return pixel;
     }
 
     private double convertYPositionToParentPosition(double yPos, int rows, double unitScale, double gapMultiplier) {
