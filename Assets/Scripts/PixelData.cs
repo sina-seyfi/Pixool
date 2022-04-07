@@ -8,12 +8,12 @@ public class PixelColor: PixelData {
 }
 public class PixelEmpty : PixelData { }
 public class PixelWaiting : PixelColor {
-	PixelWaiting(Color32 Color) {
+	public PixelWaiting(Color32 Color) {
 		this.Color = Color;
 	}
 }
 public class PixelShelf : PixelColor {
-	PixelShelf(Color32 Color) {
+	public PixelShelf(Color32 Color) {
 		this.Color = Color;
 	}
 }
