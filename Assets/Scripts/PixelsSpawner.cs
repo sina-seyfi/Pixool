@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PixelSpawner : MonoBehaviour
+public class PixelsSpawner : MonoBehaviour
 {
     private double gap = 0.2f;
     private double screenMarginLeft = 10;
@@ -11,25 +11,6 @@ public class PixelSpawner : MonoBehaviour
     private CameraFit CameraFit;
     [SerializeField]
     private GameObject pixelPrefab;
-    [SerializeField]
-    private Texture2D dog;
-    void Start()
-    {
-        var pixels = dog.GetPixels32(0);
-        var root = Mathf.Sqrt(pixels.Length);
-        var _2dArray = new PixelData[(int) root, pixels.Length / (int) root];
-        for(int i = 0; i < pixels.Length; i++) {
-            if(Utils.onChance(0.2f)) {
-                _2dArray[i / (int) root, i % (int) root] = new PixelEmpty();
-            } else if(Utils.onChance(1f)) {
-                _2dArray[i / (int) root, i % (int) root] = new PixelWaiting(pixels[i]);
-            } else {
-                _2dArray[i / (int) root, i % (int) root] = new PixelColor() { Color = pixels[i] };
-            }
-        }
-        Spawn(_2dArray);;
-    }
-
     public void Spawn(PixelData[,] pixelsData) {
         int rows = pixelsData.GetLength(0);
         int cols = pixelsData.GetLength(1);
@@ -40,6 +21,7 @@ public class PixelSpawner : MonoBehaviour
             if(row >= 1) yPos += row * gap * unitScale;
             double parentYPos = convertYPositionToParentPosition(yPos, rows, unitScale, gap);
             for(int col = 0; col < cols; col++) {
+                var pixelData = pixelsData[row, col];
                 double xPos = col * unitScale;
                 if(col >= 1) xPos += col * gap * unitScale;
                 double parentXPos = convertXPositionToParentPosition(xPos, cols, unitScale, gap);
@@ -49,7 +31,7 @@ public class PixelSpawner : MonoBehaviour
                 GameObject go = createPixel(scale, parent, position);
                 Pixel pixel = go.GetComponent<Pixel>();
                 if(pixel != null) {
-                    pixel.Data = pixelsData[row, col];
+                    pixel.Data = pixelData;
 				}
             }
         }

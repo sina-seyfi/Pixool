@@ -2,18 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface PixelData { }
-public class PixelColor: PixelData {
-	public Color32 Color { set; get; }
+public abstract class PixelData {
+	public int X { get; set; } = -1;
+	public int Y { get; set; } = -1;
 }
-public class PixelEmpty : PixelData { }
-public class PixelWaiting : PixelColor {
-	public PixelWaiting(Color32 Color) {
+public class PixelColor: PixelData {
+	public Color32 Color { protected set; get; }
+	public PixelColor(Color32 Color) {
 		this.Color = Color;
+	}
+}
+public class PixelEmpty : PixelData {
+	public PixelColor PixelColor { get; }
+	public PixelEmpty(PixelColor PixelColor) {
+		this.PixelColor = PixelColor;
+	}
+}
+public class PixelWaiting : PixelData {
+	public PixelColor PixelColor { get; }
+	public PixelWaiting(PixelColor PixelColor) {
+		this.PixelColor = PixelColor;
 	}
 }
 public class PixelShelf : PixelColor {
-	public PixelShelf(Color32 Color) {
-		this.Color = Color;
-	}
+	public PixelShelf(Color32 Color) : base(Color) { }
 }
