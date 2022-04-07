@@ -17,10 +17,16 @@ public class PixelSpawner : MonoBehaviour
     {
         var pixels = dog.GetPixels32(0);
         var root = Mathf.Sqrt(pixels.Length);
-        var _2dArray = new PixelColor[(int) root, pixels.Length / (int) root];
+        var _2dArray = new PixelData[(int) root, pixels.Length / (int) root];
         for(int i = 0; i < pixels.Length; i++) {
-            _2dArray[i / (int) root, i % (int) root] = new PixelColor() { Color = pixels[i] };
-		}
+            if(Utils.onChance(0.2f)) {
+                _2dArray[i / (int) root, i % (int) root] = new PixelEmpty();
+            } else if(Utils.onChance(1f)) {
+                _2dArray[i / (int) root, i % (int) root] = new PixelWaiting(pixels[i]);
+            } else {
+                _2dArray[i / (int) root, i % (int) root] = new PixelColor() { Color = pixels[i] };
+            }
+        }
         Spawn(_2dArray);;
     }
 
