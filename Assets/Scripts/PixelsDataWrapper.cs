@@ -1,5 +1,4 @@
-using UnityEngine;
-public abstract class PixelsDataWrapper: MonoBehaviour {
+public abstract class PixelsDataWrapper {
 
     private PixelData[,] pixelsData;
     public PixelData[,] PixelsData {

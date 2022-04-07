@@ -17,12 +17,6 @@ public class PinchDetection : MonoBehaviour
 	private void Awake() {
 		controls = new TouchControls();
 	}
-	private void OnDisable() {
-		controls.Disable();
-	}
-	private void OnEnable() {
-		controls.Enable();
-	}
 	private void Start() {
 		controls.Touch.SecondaryTouchContact.started += _ => ZoomStart();
 		controls.Touch.SecondaryTouchContact.canceled += _ => ZoomEnd();

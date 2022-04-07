@@ -16,12 +16,16 @@ public class PixelEmpty : PixelData {
 	public PixelColor PixelColor { get; }
 	public PixelEmpty(PixelColor PixelColor) {
 		this.PixelColor = PixelColor;
+		this.X = PixelColor.X;
+		this.Y = PixelColor.Y;
 	}
 }
 public class PixelWaiting : PixelData {
 	public PixelColor PixelColor { get; }
 	public PixelWaiting(PixelColor PixelColor) {
 		this.PixelColor = PixelColor;
+		this.X = PixelColor.X;
+		this.Y = PixelColor.Y;
 	}
 }
 public class PixelShelf : PixelColor {

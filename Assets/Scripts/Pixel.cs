@@ -13,11 +13,8 @@ public class Pixel : MonoBehaviour
 		return srBase;
 	}
 	private SpriteRenderer getOverlaySpriteRenderer() {
-		enableOverlaySpriteRenderer();
-		return srOverlay;
-	}
-	private void enableOverlaySpriteRenderer() {
 		if(!srOverlay.enabled) srOverlay.enabled = true;
+		return srOverlay;
 	}
 	private void disableOverlaySpriteRenderer() {
 		if(srOverlay.enabled) srOverlay.enabled = false;
@@ -37,6 +34,7 @@ public class Pixel : MonoBehaviour
 		disableOverlaySpriteRenderer();
 		switch(data) {
 			case PixelEmpty: {
+				Debug.Log("Called");
 				getSpriteRenderer().color = Color.white;
 				getOverlaySpriteRenderer().color = Color.black;
 				break;
