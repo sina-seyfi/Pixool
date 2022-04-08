@@ -46,8 +46,15 @@ public class PixelsManager : MonoBehaviour
     }
 
     private void placedPixelShelf(PixelShelf shelf, PixelWaiting color) {
-
-	}
+        spawner.Reshape(
+            (data) => {
+                if(data is PixelWaiting) {
+                    return new PixelEmpty(((PixelWaiting) data).PixelColor);
+                }
+                return data;
+            }
+            );
+    }
 
     // Update is called once per frame
     void Update()
