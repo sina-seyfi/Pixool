@@ -10,9 +10,11 @@ public class PixelsManager : MonoBehaviour
     private PixelsSpawner spawner;
     private PixelsDataWrapper wrapper;
     private PixelsDataEvaluator evaluator;
+    private PixelsClickManager clickManager;
     // Start is called before the first frame update
     void Start()
     {
+        clickManager = new PixelsClickManager();
         wrapper = new EasyPixelsDataWrapper(provider);
         spawner.Spawn(wrapper.PixelsData);
         evaluator = new PixelsDataEvaluator(wrapper);
