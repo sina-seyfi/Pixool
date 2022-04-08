@@ -34,7 +34,7 @@ public class PixelsClickManager
 	}
 
 	public void resetState() {
-
+		selectedPixelShelf = null;
 	}
 
 }

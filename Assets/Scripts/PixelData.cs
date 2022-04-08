@@ -29,5 +29,6 @@ public class PixelWaiting : PixelData {
 	}
 }
 public class PixelShelf : PixelColor {
+	public bool IsSelected { get; set; }
 	public PixelShelf(Color32 Color) : base(Color) { }
 }

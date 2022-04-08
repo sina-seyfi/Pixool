@@ -14,11 +14,40 @@ public class PixelsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        clickManager = new PixelsClickManager();
         wrapper = new EasyPixelsDataWrapper(provider);
+        clickManager = new PixelsClickManager();
         spawner.Spawn(wrapper.PixelsData);
         evaluator = new PixelsDataEvaluator(wrapper);
+        clickManager.selected += selectedPixelShelf;
+        clickManager.deselected += deselectedPixelShelf;
+        clickManager.placed += placedPixelShelf;
     }
+
+    private void selectedPixelShelf(PixelShelf pixelShelf) {
+        spawner.Reshape(
+            (data) => {
+                if(data is PixelEmpty) {
+                    return new PixelWaiting(((PixelEmpty) data).PixelColor);
+				}
+                return data;
+			}
+            );
+	}
+
+    private void deselectedPixelShelf(PixelShelf pixelShelf) {
+        spawner.Reshape(
+            (data) => {
+                if(data is PixelWaiting) {
+                    return new PixelEmpty(((PixelWaiting) data).PixelColor);
+                }
+                return data;
+            }
+            );
+    }
+
+    private void placedPixelShelf(PixelShelf shelf, PixelWaiting color) {
+
+	}
 
     // Update is called once per frame
     void Update()
