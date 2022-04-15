@@ -7,7 +7,9 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 
 	private IGameContract.IGamePresenter presenter;
 	[SerializeField]
-	private PixelsSpawner spawner;
+	private PixelsSpawner mainPixelsSpawner;
+	[SerializeField]
+	private PixelsSpawner shelfPixelsSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -26,15 +28,14 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 	}
 
 	void IGameContract.IGameView.updatePixels(PixelData[,] pixels) {
-		Debug.Log("Pixels came");
-		spawner.Spawn(pixels);
+		mainPixelsSpawner.Spawn(pixels);
 	}
 
 	void IGameContract.IGameView.updateReferenceTexture(Texture2D texture) {
 		// TODO Implement this later
 	}
 
-	void IGameContract.IGameView.updateShelf(PixelData[,] pixels) {
-		// TODO Implement this later
+	void IGameContract.IGameView.updateShelf(PixelShelf[,] pixels) {
+		shelfPixelsSpawner.Spawn(pixels);
 	}
 }

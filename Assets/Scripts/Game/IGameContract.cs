@@ -7,7 +7,7 @@ public interface IGameContract {
 		void updateLevelName(string name);
 		void updateReferenceTexture(Texture2D texture);
 		void updatePixels(PixelData[,] pixels);
-		void updateShelf(PixelData[,] pixels);
+		void updateShelf(PixelShelf[,] pixels);
 	}
 	// This is the layer view will call on every action from view
 	public interface IGamePresenter {
@@ -16,7 +16,9 @@ public interface IGameContract {
 	// This is data provider layer
 	public interface IGameModel {
 		void initState();
-		ReactiveProperty<PixelData[,]> getPixels();
+		ReactiveProperty<PixelData[,]> getPixelsReactiveProperty();
+		PixelData[,] getPixels();
+		ReactiveProperty<Texture2D> getTextureReactiveProperty();
 		void removeMissedPixel(PixelEmpty pixel);
 		void resetState();
 	}

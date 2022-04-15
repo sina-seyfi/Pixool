@@ -9,6 +9,10 @@ public class Pixel : MonoBehaviour
 	private SpriteRenderer srBase;
 	[SerializeField]
 	private SpriteRenderer srOverlay;
+	[SerializeField]
+	private Sprite empty;
+	[SerializeField]
+	private Sprite selected;
 	private SpriteRenderer getSpriteRenderer() {
 		return srBase;
 	}
@@ -34,18 +38,23 @@ public class Pixel : MonoBehaviour
 		disableOverlaySpriteRenderer();
 		switch(data) {
 			case PixelEmpty: {
-				Debug.Log("Called");
 				getSpriteRenderer().color = Color.white;
+				getOverlaySpriteRenderer().sprite = empty;
 				getOverlaySpriteRenderer().color = Color.black;
 				break;
 			}
 			case PixelWaiting pw: {
 				getSpriteRenderer().color = Color.white;
+				getOverlaySpriteRenderer().sprite = empty;
 				getOverlaySpriteRenderer().color = pw.PixelColor.Color;
 				break;
 			}
 			case PixelShelf ps: {
 				getSpriteRenderer().color = ps.Color;
+				if(ps.IsSelected){
+					getOverlaySpriteRenderer().sprite = selected;
+					getOverlaySpriteRenderer().color = Color.white;
+				}
 				break;
 			}
 			case PixelColor pc: {
@@ -58,19 +67,19 @@ public class Pixel : MonoBehaviour
 	private void updateName() {
 		switch(data) {
 			case PixelEmpty: {
-					name = "PixelEmpty (" + data.Y + ", " + data.X + ")";
+					name = "PixelEmpty (" + data.X + ", " + data.Y + ")";
 					break;
 				}
 			case PixelWaiting pw: {
-					name = "PixelWaiting (" + data.Y + ", " + data.X + ")";
+					name = "PixelWaiting (" + data.X + ", " + data.Y + ")";
 					break;
 				}
 			case PixelShelf ps: {
-					name = "PixelShelf (" + data.Y + ", " + data.X + ")";
+					name = "PixelShelf (" + data.X + ", " + data.Y + ")";
 					break;
 				}
 			case PixelColor pc: {
-					name = "PixelColor (" + data.Y + ", " + data.X + ")";
+					name = "PixelColor (" + data.X + ", " + data.Y + ")";
 					break;
 				}
 		}
