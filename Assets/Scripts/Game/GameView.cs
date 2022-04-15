@@ -6,6 +6,8 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 {
 
 	private IGameContract.IGamePresenter presenter;
+	[SerializeField]
+	private PixelsSpawner spawner;
 
     // Start is called before the first frame update
     void Start()
@@ -20,18 +22,19 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
     }
 
 	void IGameContract.IGameView.updateLevelName(string name) {
-		throw new System.NotImplementedException();
+		// TODO Implement this later
 	}
 
 	void IGameContract.IGameView.updatePixels(PixelData[,] pixels) {
-		throw new System.NotImplementedException();
+		Debug.Log("Pixels came");
+		spawner.Spawn(pixels);
 	}
 
 	void IGameContract.IGameView.updateReferenceTexture(Texture2D texture) {
-		throw new System.NotImplementedException();
+		// TODO Implement this later
 	}
 
 	void IGameContract.IGameView.updateShelf(PixelData[,] pixels) {
-		throw new System.NotImplementedException();
+		// TODO Implement this later
 	}
 }

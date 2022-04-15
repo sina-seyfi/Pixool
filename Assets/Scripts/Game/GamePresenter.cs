@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UniRx;
 
 public class GamePresenter : IGameContract.IGamePresenter {
 
@@ -10,9 +8,15 @@ public class GamePresenter : IGameContract.IGamePresenter {
 	public GamePresenter(IGameContract.IGameView view) {
 		this.view = view;
 		this.model = GameModelBuilder.build();
+		this.model.initState();
+		init();
 	}
 
-	void IGameContract.IGamePresenter.onPixelSelected(PixelData pixel) {
-		throw new System.NotImplementedException();
+	private void init() {
+		model.getPixels().Subscribe(xs => view.updatePixels(xs));
+	}
+
+    void IGameContract.IGamePresenter.onPixelSelected(PixelData pixel) {
+		// TODO Implement this later...
 	}
 }
