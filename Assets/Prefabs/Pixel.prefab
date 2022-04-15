@@ -269,3 +269,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   srBase: {fileID: 1306074942657982379}
   srOverlay: {fileID: 4685962369882151216}
+  empty: {fileID: 21300000, guid: 8a81e0fd5959adb4d81921070e61b63b, type: 3}
+  selected: {fileID: 21300000, guid: a2e05c58972544990b4c03f14da3b66e, type: 3}
