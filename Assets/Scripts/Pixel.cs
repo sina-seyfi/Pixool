@@ -13,11 +13,8 @@ public class Pixel : MonoBehaviour
 		return srBase;
 	}
 	private SpriteRenderer getOverlaySpriteRenderer() {
-		enableOverlaySpriteRenderer();
-		return srOverlay;
-	}
-	private void enableOverlaySpriteRenderer() {
 		if(!srOverlay.enabled) srOverlay.enabled = true;
+		return srOverlay;
 	}
 	private void disableOverlaySpriteRenderer() {
 		if(srOverlay.enabled) srOverlay.enabled = false;
@@ -28,6 +25,7 @@ public class Pixel : MonoBehaviour
 			if(value != null) {
 				data = value;
 				updateInternalState();
+				updateName();
 			}
 		}
 	}
@@ -36,13 +34,14 @@ public class Pixel : MonoBehaviour
 		disableOverlaySpriteRenderer();
 		switch(data) {
 			case PixelEmpty: {
+				Debug.Log("Called");
 				getSpriteRenderer().color = Color.white;
 				getOverlaySpriteRenderer().color = Color.black;
 				break;
 			}
 			case PixelWaiting pw: {
 				getSpriteRenderer().color = Color.white;
-				getOverlaySpriteRenderer().color = pw.Color;
+				getOverlaySpriteRenderer().color = pw.PixelColor.Color;
 				break;
 			}
 			case PixelShelf ps: {
@@ -55,4 +54,26 @@ public class Pixel : MonoBehaviour
 			}
 		}
 	}
+
+	private void updateName() {
+		switch(data) {
+			case PixelEmpty: {
+					name = "PixelEmpty (" + data.Y + ", " + data.X + ")";
+					break;
+				}
+			case PixelWaiting pw: {
+					name = "PixelWaiting (" + data.Y + ", " + data.X + ")";
+					break;
+				}
+			case PixelShelf ps: {
+					name = "PixelShelf (" + data.Y + ", " + data.X + ")";
+					break;
+				}
+			case PixelColor pc: {
+					name = "PixelColor (" + data.Y + ", " + data.X + ")";
+					break;
+				}
+		}
+	}
+
 }
