@@ -48,7 +48,8 @@ public class PixelsSpawner : MonoBehaviour
     [SerializeField]
     private GameObject pixelPrefab;
     private GameObject[,] GOes;
-    public void Spawn(PixelData[,] pixelsData) {
+
+    public void Spawn(PixelData[,] pixelsData, Action<GameObject> pixelAction) {
         int rowSize = pixelsData.GetLength(0);
         int colSize = pixelsData.GetLength(1);
         bool useCacheGameObject = false;
@@ -60,43 +61,57 @@ public class PixelsSpawner : MonoBehaviour
             useCacheGameObject =
                 rowSize == rowCacheSize &&
                 colSize == colCacheSize;
-            if(!useCacheGameObject) {
+            if (!useCacheGameObject)
+            {
                 for (int i = 0; i < rowCacheSize; i++)
                     for (int j = 0; j < colCacheSize; j++)
                         Destroy(GOes[i, j]);
                 GOes = new GameObject[rowSize, colSize];
             }
-        } else {
+        }
+        else
+        {
             GOes = new GameObject[rowSize, colSize];
         }
         double rowWidthUnit = colSize + ((colSize - 1) * Gap) + screenMarginLeft + screenMarginRight;
         double unitScale = CameraFit.SCREEN_WIDTH / rowWidthUnit;
-        for(int row = 0; row < rowSize; row++) {
+        for (int row = 0; row < rowSize; row++)
+        {
             double yPos = -row * unitScale;
-            if(row >= 1) yPos -= row * Gap * unitScale;
+            if (row >= 1) yPos -= row * Gap * unitScale;
             double parentYPos = convertYPositionToParentPosition(yPos, rowSize, unitScale, Gap);
-            for(int col = 0; col < colSize; col++) {
+            for (int col = 0; col < colSize; col++)
+            {
                 var pixelData = pixelsData[row, col];
-                double xPos = col * unitScale;
-                if(col >= 1) xPos += col * Gap * unitScale;
-                double parentXPos = convertXPositionToParentPosition(xPos, colSize, unitScale, Gap);
-                Vector3 scale = new Vector3((float) unitScale, (float) unitScale);
-                Transform parent = gameObject.transform;
-                Vector3 position = new Vector3((float) parentXPos, (float) parentYPos, 0f);
-                GameObject go;
-                if(useCacheGameObject) {
-                    go = GOes[row, col];
-                    updatePixel(go, scale, parent, position);
+                if(pixelData != null) {
+                    double xPos = col * unitScale;
+                    if (col >= 1) xPos += col * Gap * unitScale;
+                    double parentXPos = convertXPositionToParentPosition(xPos, colSize, unitScale, Gap);
+                    Vector3 scale = new Vector3((float)unitScale, (float)unitScale);
+                    Transform parent = gameObject.transform;
+                    Vector3 position = new Vector3((float)parentXPos, (float)parentYPos, 0f);
+                    GameObject go;
+                    if (useCacheGameObject)
+                    {
+                        go = GOes[row, col];
+                        // updatePixel(go, scale, parent, position);
+                    }
+                    else
+                    {
+                        go = createPixel(scale, parent, position);
+                        GOes[row, col] = go;
+                    }
+                    Pixel pixel = go.GetComponent<Pixel>();
+                    if (pixel != null) pixel.Data = pixelData;
+                    if (pixelAction != null) pixelAction.Invoke(go);
                 } else {
-                    go = createPixel(scale, parent, position);
-                    GOes[row, col] = go;
+                    Destroy(GOes[row, col]);
                 }
-                Pixel pixel = go.GetComponent<Pixel>();
-                if(pixel != null) {
-                    pixel.Data = pixelData;
-				}
             }
         }
+    }
+    public void Spawn(PixelData[,] pixelsData) {
+        Spawn(pixelsData, null);
     }
 
     public void Reshape(Func<PixelData, PixelData> lambda) {
@@ -119,10 +134,10 @@ public class PixelsSpawner : MonoBehaviour
         return pixel;
     }
 
-    private void updatePixel(GameObject pixel, Vector3 scale, Transform parent, Vector3 position) {
-        pixel.transform.localScale = scale;
-        pixel.transform.position = position + parent.position;
-    }
+    //private void updatePixel(GameObject pixel, Vector3 scale, Transform parent, Vector3 position) {
+    //    pixel.transform.localScale = scale;
+    //    pixel.transform.position = position + parent.position;
+    //}
 
     private double convertYPositionToParentPosition(double yPos, int rows, double unitScale, double gapMultiplier) {
         double maxHeight = (rows * unitScale) + ((rows - 1) * gapMultiplier * unitScale);

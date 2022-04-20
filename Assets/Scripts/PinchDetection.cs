@@ -18,8 +18,8 @@ public class PinchDetection : MonoBehaviour
 		controls = new TouchControls();
 	}
 	private void Start() {
-		controls.Touch.SecondaryTouchContact.started += _ => ZoomStart();
-		controls.Touch.SecondaryTouchContact.canceled += _ => ZoomEnd();
+		controls.PinchtoZoom.SecondaryTouchContact.started += _ => ZoomStart();
+		controls.PinchtoZoom.SecondaryTouchContact.canceled += _ => ZoomEnd();
 	}
 	private void ZoomStart() {
 		zoomCoroutine = StartCoroutine(ZoomDetection());
@@ -30,7 +30,7 @@ public class PinchDetection : MonoBehaviour
 	IEnumerator ZoomDetection() {
 		float previousDistance = 0f, distance = 0f;
 		while(true) {
-			distance = Vector2.Distance(controls.Touch.PrimaryFingerPosition.ReadValue<Vector2>(), controls.Touch.SecondaryFingerPosition.ReadValue<Vector2>());
+			distance = Vector2.Distance(controls.PinchtoZoom.PrimaryFingerPosition.ReadValue<Vector2>(), controls.PinchtoZoom.SecondaryFingerPosition.ReadValue<Vector2>());
 			// Detection
 			// Zoom Out
 			if(previousDistance > 0f) {

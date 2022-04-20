@@ -5,7 +5,7 @@ using UniRx;
 
 public class GamePresenter : IGameContract.IGamePresenter {
 
-	public static int SHELF_ROW_SIZE = 5;
+	public static int SHELF_ROW_SIZE = 7;
 
 	private IGameContract.IGameView view;
 	private IGameContract.IGameModel model;
@@ -37,15 +37,18 @@ public class GamePresenter : IGameContract.IGamePresenter {
 			{
 				var pixel = pixels[i, j];
 				if(pixel is PixelEmpty) {
-					shelfPixels.Add(new PixelShelf(((PixelEmpty)pixel).PixelColor.Color));
+					var shelf = new PixelShelf(((PixelEmpty)pixel).PixelColor.Color);
+					if(isSelectedAnyPixelShelf())
+						shelf.IsSelected = shelf.Color.Equals(selectedShelfPixel.Color);
+					shelfPixels.Add(shelf);
                 }
 			}
 		}
 		var _2dArray = new PixelShelf[(int) Mathf.Ceil(shelfPixels.Count / (float) SHELF_ROW_SIZE), SHELF_ROW_SIZE];
         for (int i = 0; i < shelfPixels.Count; i++)
         {
-			var row = i / 5;
-			var col = i % 5;
+			var row = i / SHELF_ROW_SIZE;
+			var col = i % SHELF_ROW_SIZE;
 			_2dArray[row, col] = (PixelShelf) shelfPixels[i];
         }
 		view.updateShelf(_2dArray);
@@ -91,13 +94,28 @@ public class GamePresenter : IGameContract.IGamePresenter {
         {
 			case PixelShelf ps:
                 {
-					selectedShelfPixel = ps;
+					Debug.Log("Pixel Shelf is Clicked");
+					if(isSelectedAnyPixelShelf() && selectedShelfPixel.Color.Equals(ps.Color)) {
+						selectedShelfPixel = null;
+                    } else {
+						selectedShelfPixel = ps;
+                    }
 					updateViewMainPixels(model.getPixels());
+					updateViewShelfPixels(model.getPixels());
 					break;
                 }
 			case PixelWaiting pw:
                 {
-
+					Debug.Log("Pixel Waiting is Clicked");
+					if(isSelectedAnyPixelShelf())
+                    {
+						if(selectedShelfPixel.Color.Equals(pw.PixelColor.Color)) {
+							selectedShelfPixel = null;
+							model.removeMissedPixel(new PixelEmpty(pw.PixelColor));
+						} else {
+							// TODO Remove one from score
+                        }
+                    }
 					break;
                 }
 			default:

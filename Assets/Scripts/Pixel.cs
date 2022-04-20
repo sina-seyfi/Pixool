@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pixel : MonoBehaviour
@@ -13,7 +11,19 @@ public class Pixel : MonoBehaviour
 	private Sprite empty;
 	[SerializeField]
 	private Sprite selected;
-	private SpriteRenderer getSpriteRenderer() {
+	[SerializeField]
+	private ClickHandler ClickHandler;
+	public delegate void PixelSelectEvent(PixelData data);
+	public event PixelSelectEvent selectEvent;
+    private void Start()
+    {
+        ClickHandler.handler += onClickListener;
+    }
+    private void OnDestroy()
+    {
+		ClickHandler.handler -= onClickListener;
+	}
+    private SpriteRenderer getSpriteRenderer() {
 		return srBase;
 	}
 	private SpriteRenderer getOverlaySpriteRenderer() {
@@ -52,8 +62,12 @@ public class Pixel : MonoBehaviour
 			case PixelShelf ps: {
 				getSpriteRenderer().color = ps.Color;
 				if(ps.IsSelected){
+					var luminance = Utils.calculateLuminance(ps.Color);
 					getOverlaySpriteRenderer().sprite = selected;
-					getOverlaySpriteRenderer().color = Color.white;
+					if(luminance >= 0.5)
+						getOverlaySpriteRenderer().color = Color.black;
+					else
+						getOverlaySpriteRenderer().color = Color.white;
 				}
 				break;
 			}
@@ -84,5 +98,12 @@ public class Pixel : MonoBehaviour
 				}
 		}
 	}
+
+	private void onClickListener() {
+		if(selectEvent != null)
+        {
+			selectEvent.Invoke(data);
+        }
+    }
 
 }

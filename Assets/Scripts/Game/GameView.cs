@@ -28,7 +28,13 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 	}
 
 	void IGameContract.IGameView.updatePixels(PixelData[,] pixels) {
-		mainPixelsSpawner.Spawn(pixels);
+		mainPixelsSpawner.Spawn(pixels, pixelGo => {
+			var pixel = pixelGo.GetComponent<Pixel>();
+			if(pixel != null) {
+				pixel.selectEvent -= onPixelSelected;
+				pixel.selectEvent += onPixelSelected;
+			}
+		});
 	}
 
 	void IGameContract.IGameView.updateReferenceTexture(Texture2D texture) {
@@ -36,6 +42,18 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 	}
 
 	void IGameContract.IGameView.updateShelf(PixelShelf[,] pixels) {
-		shelfPixelsSpawner.Spawn(pixels);
+		shelfPixelsSpawner.Spawn(pixels, pixelGo => {
+			var pixel = pixelGo.GetComponent<Pixel>();
+			if (pixel != null)
+			{
+				pixel.selectEvent -= onPixelSelected;
+				pixel.selectEvent += onPixelSelected;
+			}
+		});
 	}
+
+	private void onPixelSelected(PixelData data) {
+		presenter.onPixelSelected(data);
+    }
+
 }

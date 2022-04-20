@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 8a81e0fd5959adb4d81921070e61b63b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -156,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: b2e259f9821b1ea4ca5f2ee8fe19b937, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -178,7 +178,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6412027887607555938}
   - component: {fileID: 6412027887607555937}
+  - component: {fileID: 1055474276357292590}
   - component: {fileID: -4457119037697619744}
+  - component: {fileID: 4081273302564063126}
   m_Layer: 0
   m_Name: Pixel
   m_TagString: Untagged
@@ -255,6 +257,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1055474276357292590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412027887607555936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1294e40c160254396b291e54a4c52c58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-4457119037697619744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,4 +284,18 @@ MonoBehaviour:
   srBase: {fileID: 1306074942657982379}
   srOverlay: {fileID: 4685962369882151216}
   empty: {fileID: 21300000, guid: 8a81e0fd5959adb4d81921070e61b63b, type: 3}
-  selected: {fileID: 21300000, guid: a2e05c58972544990b4c03f14da3b66e, type: 3}
+  selected: {fileID: 21300000, guid: 3c7cf057188354ea482da82a3566d6b7, type: 3}
+  ClickHandler: {fileID: 1055474276357292590}
+--- !u!65 &4081273302564063126
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412027887607555936}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.1}
+  m_Center: {x: 0.5, y: -0.5, z: 0.05}
