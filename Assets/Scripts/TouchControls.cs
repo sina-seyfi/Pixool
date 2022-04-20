@@ -24,7 +24,7 @@ public partial class @TouchControls : IInputActionCollection2, IDisposable
     ""name"": ""TouchControls"",
     ""maps"": [
         {
-            ""name"": ""Touch"",
+            ""name"": ""Pinch to Zoom"",
             ""id"": ""1fb9174a-969f-459b-9c1c-637b2050aa5b"",
             ""actions"": [
                 {
@@ -90,15 +90,57 @@ public partial class @TouchControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Click"",
+            ""id"": ""d2451b63-4f8d-45ef-b862-94b9b8f45939"",
+            ""actions"": [
+                {
+                    ""name"": ""PrimaryFingerClicked"",
+                    ""type"": ""Button"",
+                    ""id"": ""fca834dc-bf4f-48d2-84fb-f5821be982ac"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a881f9eb-1c45-43fd-9067-058c76a0ff0a"",
+                    ""path"": ""<Touchscreen>/touch0/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFingerClicked"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""465bb2db-9168-4a64-aa5a-5737c474aaba"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimaryFingerClicked"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
 }");
-        // Touch
-        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
-        m_Touch_PrimaryFingerPosition = m_Touch.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
-        m_Touch_SecondaryFingerPosition = m_Touch.FindAction("SecondaryFingerPosition", throwIfNotFound: true);
-        m_Touch_SecondaryTouchContact = m_Touch.FindAction("SecondaryTouchContact", throwIfNotFound: true);
+        // Pinch to Zoom
+        m_PinchtoZoom = asset.FindActionMap("Pinch to Zoom", throwIfNotFound: true);
+        m_PinchtoZoom_PrimaryFingerPosition = m_PinchtoZoom.FindAction("PrimaryFingerPosition", throwIfNotFound: true);
+        m_PinchtoZoom_SecondaryFingerPosition = m_PinchtoZoom.FindAction("SecondaryFingerPosition", throwIfNotFound: true);
+        m_PinchtoZoom_SecondaryTouchContact = m_PinchtoZoom.FindAction("SecondaryTouchContact", throwIfNotFound: true);
+        // Click
+        m_Click = asset.FindActionMap("Click", throwIfNotFound: true);
+        m_Click_PrimaryFingerClicked = m_Click.FindAction("PrimaryFingerClicked", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -155,39 +197,39 @@ public partial class @TouchControls : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Touch
-    private readonly InputActionMap m_Touch;
-    private ITouchActions m_TouchActionsCallbackInterface;
-    private readonly InputAction m_Touch_PrimaryFingerPosition;
-    private readonly InputAction m_Touch_SecondaryFingerPosition;
-    private readonly InputAction m_Touch_SecondaryTouchContact;
-    public struct TouchActions
+    // Pinch to Zoom
+    private readonly InputActionMap m_PinchtoZoom;
+    private IPinchtoZoomActions m_PinchtoZoomActionsCallbackInterface;
+    private readonly InputAction m_PinchtoZoom_PrimaryFingerPosition;
+    private readonly InputAction m_PinchtoZoom_SecondaryFingerPosition;
+    private readonly InputAction m_PinchtoZoom_SecondaryTouchContact;
+    public struct PinchtoZoomActions
     {
         private @TouchControls m_Wrapper;
-        public TouchActions(@TouchControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @PrimaryFingerPosition => m_Wrapper.m_Touch_PrimaryFingerPosition;
-        public InputAction @SecondaryFingerPosition => m_Wrapper.m_Touch_SecondaryFingerPosition;
-        public InputAction @SecondaryTouchContact => m_Wrapper.m_Touch_SecondaryTouchContact;
-        public InputActionMap Get() { return m_Wrapper.m_Touch; }
+        public PinchtoZoomActions(@TouchControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PrimaryFingerPosition => m_Wrapper.m_PinchtoZoom_PrimaryFingerPosition;
+        public InputAction @SecondaryFingerPosition => m_Wrapper.m_PinchtoZoom_SecondaryFingerPosition;
+        public InputAction @SecondaryTouchContact => m_Wrapper.m_PinchtoZoom_SecondaryTouchContact;
+        public InputActionMap Get() { return m_Wrapper.m_PinchtoZoom; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
-        public void SetCallbacks(ITouchActions instance)
+        public static implicit operator InputActionMap(PinchtoZoomActions set) { return set.Get(); }
+        public void SetCallbacks(IPinchtoZoomActions instance)
         {
-            if (m_Wrapper.m_TouchActionsCallbackInterface != null)
+            if (m_Wrapper.m_PinchtoZoomActionsCallbackInterface != null)
             {
-                @PrimaryFingerPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
-                @PrimaryFingerPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnPrimaryFingerPosition;
-                @SecondaryFingerPosition.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerPosition;
-                @SecondaryFingerPosition.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerPosition;
-                @SecondaryFingerPosition.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryFingerPosition;
-                @SecondaryTouchContact.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryTouchContact;
-                @SecondaryTouchContact.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryTouchContact;
-                @SecondaryTouchContact.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnSecondaryTouchContact;
+                @PrimaryFingerPosition.started -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.performed -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnPrimaryFingerPosition;
+                @PrimaryFingerPosition.canceled -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnPrimaryFingerPosition;
+                @SecondaryFingerPosition.started -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryFingerPosition;
+                @SecondaryFingerPosition.performed -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryFingerPosition;
+                @SecondaryFingerPosition.canceled -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryFingerPosition;
+                @SecondaryTouchContact.started -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryTouchContact;
+                @SecondaryTouchContact.performed -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryTouchContact;
+                @SecondaryTouchContact.canceled -= m_Wrapper.m_PinchtoZoomActionsCallbackInterface.OnSecondaryTouchContact;
             }
-            m_Wrapper.m_TouchActionsCallbackInterface = instance;
+            m_Wrapper.m_PinchtoZoomActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @PrimaryFingerPosition.started += instance.OnPrimaryFingerPosition;
@@ -202,11 +244,48 @@ public partial class @TouchControls : IInputActionCollection2, IDisposable
             }
         }
     }
-    public TouchActions @Touch => new TouchActions(this);
-    public interface ITouchActions
+    public PinchtoZoomActions @PinchtoZoom => new PinchtoZoomActions(this);
+
+    // Click
+    private readonly InputActionMap m_Click;
+    private IClickActions m_ClickActionsCallbackInterface;
+    private readonly InputAction m_Click_PrimaryFingerClicked;
+    public struct ClickActions
+    {
+        private @TouchControls m_Wrapper;
+        public ClickActions(@TouchControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PrimaryFingerClicked => m_Wrapper.m_Click_PrimaryFingerClicked;
+        public InputActionMap Get() { return m_Wrapper.m_Click; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ClickActions set) { return set.Get(); }
+        public void SetCallbacks(IClickActions instance)
+        {
+            if (m_Wrapper.m_ClickActionsCallbackInterface != null)
+            {
+                @PrimaryFingerClicked.started -= m_Wrapper.m_ClickActionsCallbackInterface.OnPrimaryFingerClicked;
+                @PrimaryFingerClicked.performed -= m_Wrapper.m_ClickActionsCallbackInterface.OnPrimaryFingerClicked;
+                @PrimaryFingerClicked.canceled -= m_Wrapper.m_ClickActionsCallbackInterface.OnPrimaryFingerClicked;
+            }
+            m_Wrapper.m_ClickActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @PrimaryFingerClicked.started += instance.OnPrimaryFingerClicked;
+                @PrimaryFingerClicked.performed += instance.OnPrimaryFingerClicked;
+                @PrimaryFingerClicked.canceled += instance.OnPrimaryFingerClicked;
+            }
+        }
+    }
+    public ClickActions @Click => new ClickActions(this);
+    public interface IPinchtoZoomActions
     {
         void OnPrimaryFingerPosition(InputAction.CallbackContext context);
         void OnSecondaryFingerPosition(InputAction.CallbackContext context);
         void OnSecondaryTouchContact(InputAction.CallbackContext context);
+    }
+    public interface IClickActions
+    {
+        void OnPrimaryFingerClicked(InputAction.CallbackContext context);
     }
 }

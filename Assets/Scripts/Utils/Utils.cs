@@ -14,4 +14,12 @@ public class Utils
 		return onChance(percent, 100.0f);
 	}
 
+	public static double linearRGB(byte b) {
+		return b / 255.0;
+    }
+
+	public static double calculateLuminance(Color32 color) {
+		return (linearRGB(color.r) * 0.2126 + linearRGB(color.g) * 0.7152 + linearRGB(color.b) * 0.0722) * linearRGB(color.a);
+	}
+
 }
