@@ -18,10 +18,15 @@ public class PinchDetection : MonoBehaviour
 		controls = new TouchControls();
 	}
 	private void Start() {
+		controls.PinchtoZoom.Enable();
 		controls.PinchtoZoom.SecondaryTouchContact.started += _ => ZoomStart();
 		controls.PinchtoZoom.SecondaryTouchContact.canceled += _ => ZoomEnd();
 	}
-	private void ZoomStart() {
+    private void OnDestroy() {
+		controls.PinchtoZoom.Disable();
+    }
+    private void ZoomStart() {
+		Debug.Log("Pinch to Zoom started");
 		zoomCoroutine = StartCoroutine(ZoomDetection());
 	}
 	private void ZoomEnd() {

@@ -11,15 +11,18 @@ public class ClickDetector : MonoBehaviour
         controls = new TouchControls();
     }
 
-    private void Start()
-    {
-        controls.Enable();
+    private void Start() {
+        controls.Click.Enable();
         controls.Click.PrimaryFingerClicked.performed += _ => ClickPerformed();
     }
 
+    private void OnDestroy() {
+        controls.Click.Disable();
+    }
+
     private void ClickPerformed() {
-        var mousePosition = Mouse.current.position.ReadValue();
-        var ray = Camera.main.ScreenPointToRay(mousePosition);
+        var pointerPosition = controls.Click.PrimaryFingerPosition.ReadValue<Vector2>();
+        var ray = Camera.main.ScreenPointToRay(pointerPosition);
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit)) {
             var ClickHandler = hit.collider.gameObject.GetComponent<ClickHandler>();
