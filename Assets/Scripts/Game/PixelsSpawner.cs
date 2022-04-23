@@ -49,6 +49,18 @@ public class PixelsSpawner : MonoBehaviour
     private GameObject pixelPrefab;
     private GameObject[,] GOes;
 
+    public delegate void PixelsSpawnedEvent();
+    public event PixelsSpawnedEvent onSpawned;
+
+    public double calculateRowWidth() {
+        if (GOes != null && GOes.GetLength(1) >= 1) return calculateRowWidth(GOes.GetLength(1));
+        else return 0.0;
+    }
+
+    public double calculateRowWidth(int colSize) {
+        return colSize + ((colSize - 1) * Gap);
+    }
+
     public void Spawn(PixelData[,] pixelsData, Action<GameObject> pixelAction) {
         int rowSize = pixelsData.GetLength(0);
         int colSize = pixelsData.GetLength(1);
@@ -73,7 +85,7 @@ public class PixelsSpawner : MonoBehaviour
         {
             GOes = new GameObject[rowSize, colSize];
         }
-        double rowWidthUnit = colSize + ((colSize - 1) * Gap) + screenMarginLeft + screenMarginRight;
+        double rowWidthUnit = calculateRowWidth(colSize) + screenMarginLeft + screenMarginRight;
         double unitScale = CameraFit.SCREEN_WIDTH / rowWidthUnit;
         for (int row = 0; row < rowSize; row++)
         {
@@ -108,6 +120,9 @@ public class PixelsSpawner : MonoBehaviour
                     Destroy(GOes[row, col]);
                 }
             }
+        }
+        if(!useCacheGameObject && onSpawned != null) {
+            onSpawned.Invoke();
         }
     }
     public void Spawn(PixelData[,] pixelsData) {
