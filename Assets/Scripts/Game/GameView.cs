@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameView : MonoBehaviour, IGameContract.IGameView
 {
@@ -10,6 +11,8 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 	private PixelsSpawner mainPixelsSpawner;
 	[SerializeField]
 	private PixelsSpawner shelfPixelsSpawner;
+	[SerializeField]
+	private RawImage rawImage;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +23,6 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
     // Update is called once per frame
     void Update()
     {
-        
     }
 
 	void IGameContract.IGameView.updateLevelName(string name) {
@@ -38,7 +40,7 @@ public class GameView : MonoBehaviour, IGameContract.IGameView
 	}
 
 	void IGameContract.IGameView.updateReferenceTexture(Texture2D texture) {
-		// TODO Implement this later
+
 	}
 
 	void IGameContract.IGameView.updateShelf(PixelShelf[,] pixels) {

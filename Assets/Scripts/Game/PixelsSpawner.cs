@@ -3,6 +3,23 @@ using System;
 
 public class PixelsSpawner : MonoBehaviour
 {
+    //public const double SCALE_MULTIPLIER_MIN = 0.5;
+    //public const double SCALE_MULTIPLIER_MAX = 1.5;
+    //public const double SCALE_MULTIPLIER_DEFAULT = 1.0;
+    //[SerializeField, Range((float)SCALE_MULTIPLIER_MIN, (float)SCALE_MULTIPLIER_MAX)]
+    //private double scaleMultiplier = SCALE_MULTIPLIER_DEFAULT;
+    //public double ScaleMultiplier
+    //{
+    //    get { return scaleMultiplier; }
+    //    set
+    //    {
+    //        if (value >= SCALE_MULTIPLIER_MAX) scaleMultiplier = SCALE_MULTIPLIER_MAX;
+    //        else if (value >= SCALE_MULTIPLIER_MIN) scaleMultiplier = value;
+    //        else scaleMultiplier = SCALE_MULTIPLIER_DEFAULT;
+    //    }
+    //}
+    [SerializeField]
+    private bool drawFromTop = false;
     public const double GAP_MIN = 0.0f;
     public const double GAP_MAX = 1.0f;
     public const double GAP_DEFAULT = 0.2f;
@@ -156,7 +173,8 @@ public class PixelsSpawner : MonoBehaviour
 
     private double convertYPositionToParentPosition(double yPos, int rows, double unitScale, double gapMultiplier) {
         double maxHeight = (rows * unitScale) + ((rows - 1) * gapMultiplier * unitScale);
-        return yPos + maxHeight / 2.0;
+        if (drawFromTop) return yPos;
+        else return yPos + maxHeight / 2.0;
     }
 
     private double convertXPositionToParentPosition(double xPos, int cols, double unitScale, double gapMultiplier) {

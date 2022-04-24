@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class Pixel : MonoBehaviour
 {
+	public const string LAYER_PIXELS = "Pixels";
+	public const string LAYER_SHELF = "Shelf";
 	private PixelData data;
 	[SerializeField]
 	private SpriteRenderer srBase;
 	[SerializeField]
 	private SpriteRenderer srOverlay;
+	[SerializeField]
+	private BoxCollider boxCollider;
 	[SerializeField]
 	private Sprite empty;
 	[SerializeField]
@@ -46,22 +50,33 @@ public class Pixel : MonoBehaviour
 
 	private void updateInternalState() {
 		disableOverlaySpriteRenderer();
+		string spLayer = null;
+		string spOverlayLayer = null;
+		bool isBoxColliderEnabled = false;
 		switch(data) {
 			case PixelEmpty: {
+				spLayer = LAYER_PIXELS;
+				spOverlayLayer = LAYER_PIXELS;
 				getSpriteRenderer().color = Color.white;
 				getOverlaySpriteRenderer().sprite = empty;
 				getOverlaySpriteRenderer().color = Color.black;
 				break;
 			}
 			case PixelWaiting pw: {
+				spLayer = LAYER_PIXELS;
+				spOverlayLayer = LAYER_PIXELS;
+				isBoxColliderEnabled = true;
 				getSpriteRenderer().color = Color.white;
 				getOverlaySpriteRenderer().sprite = empty;
 				getOverlaySpriteRenderer().color = pw.PixelColor.Color;
 				break;
 			}
 			case PixelShelf ps: {
+				spLayer = LAYER_SHELF;
+				isBoxColliderEnabled = true;
 				getSpriteRenderer().color = ps.Color;
 				if(ps.IsSelected){
+					spOverlayLayer = LAYER_SHELF;
 					var luminance = Utils.calculateLuminance(ps.Color);
 					getOverlaySpriteRenderer().sprite = selected;
 					if(luminance >= 0.5)
@@ -72,10 +87,14 @@ public class Pixel : MonoBehaviour
 				break;
 			}
 			case PixelColor pc: {
+				spLayer = LAYER_PIXELS;
 				getSpriteRenderer().color = pc.Color;
 				break;
 			}
 		}
+		if (spLayer != null) getSpriteRenderer().sortingLayerName = spLayer;
+		if (spOverlayLayer != null) getOverlaySpriteRenderer().sortingLayerName = spOverlayLayer;
+		boxCollider.enabled = isBoxColliderEnabled;
 	}
 
 	private void updateName() {

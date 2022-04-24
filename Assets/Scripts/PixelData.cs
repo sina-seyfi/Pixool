@@ -22,8 +22,10 @@ public class PixelEmpty : PixelData {
 }
 public class PixelWaiting : PixelData {
 	public PixelColor PixelColor { get; }
-	public PixelWaiting(PixelColor PixelColor) {
+	public PixelEmpty PixelEmpty { get; }
+	public PixelWaiting(PixelColor PixelColor, PixelEmpty PixelEmpty) {
 		this.PixelColor = PixelColor;
+		this.PixelEmpty = PixelEmpty;
 		this.X = PixelColor.X;
 		this.Y = PixelColor.Y;
 	}
