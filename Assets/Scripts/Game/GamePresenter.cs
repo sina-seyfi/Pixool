@@ -10,6 +10,7 @@ public class GamePresenter : IGameContract.IGamePresenter {
 	private IGameContract.IGameView view;
 	private IGameContract.IGameModel model;
 	private PixelShelf selectedShelfPixel;
+	private PixelData[,] rawPixels;
 
 	private bool isSelectedAnyPixelShelf() => selectedShelfPixel != null;
 
@@ -22,6 +23,7 @@ public class GamePresenter : IGameContract.IGamePresenter {
 
 	private void init() {
 		model.getPixelsReactiveProperty().Subscribe(pixels => {
+			rawPixels = pixels;
 			updateViewMainPixels(pixels);
 			updateViewShelfPixels(pixels);
 		});
@@ -72,7 +74,7 @@ public class GamePresenter : IGameContract.IGamePresenter {
 					case PixelEmpty pe:
                         {
 							if(isSelectedAnyPixelShelf()) {
-								_2dArray[i, j] = new PixelWaiting(selectedShelfPixel);
+								_2dArray[i, j] = new PixelWaiting(selectedShelfPixel, pe);
 							} else {
 								_2dArray[i, j] = pe;
                             }
@@ -106,12 +108,12 @@ public class GamePresenter : IGameContract.IGamePresenter {
                 }
 			case PixelWaiting pw:
                 {
-					Debug.Log("Pixel Waiting is Clicked");
-					if(isSelectedAnyPixelShelf())
+					Debug.Log("Pixel Waiting is Clicked.");
+					if(isSelectedAnyPixelShelf() && rawPixels != null)
                     {
-						if(selectedShelfPixel.Color.Equals(pw.PixelColor.Color)) {
+						if(selectedShelfPixel.Color.Equals(pw.PixelEmpty.PixelColor.Color)) {
 							selectedShelfPixel = null;
-							model.removeMissedPixel(new PixelEmpty(pw.PixelColor));
+							model.removeMissedPixel(pw.PixelEmpty);
 						} else {
 							// TODO Remove one from score
                         }
