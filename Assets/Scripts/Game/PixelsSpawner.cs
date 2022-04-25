@@ -70,12 +70,17 @@ public class PixelsSpawner : MonoBehaviour
     public event PixelsSpawnedEvent onSpawned;
 
     public double calculateRowWidth() {
-        if (GOes != null && GOes.GetLength(1) >= 1) return calculateRowWidth(GOes.GetLength(1));
+        if (GOes != null && GOes.GetLength(1) >= 1) return calculateDimension(GOes.GetLength(1));
         else return 0.0;
     }
 
-    public double calculateRowWidth(int colSize) {
-        return colSize + ((colSize - 1) * Gap);
+    public double calculateColHeight() {
+        if (GOes != null && GOes.GetLength(0) >= 1) return calculateDimension(GOes.GetLength(0));
+        else return 0.0;
+    }
+
+    public double calculateDimension(int dimensionSize) {
+        return dimensionSize + ((dimensionSize - 1) * Gap);
     }
 
     public void Spawn(PixelData[,] pixelsData, Action<GameObject> pixelAction) {
@@ -102,7 +107,7 @@ public class PixelsSpawner : MonoBehaviour
         {
             GOes = new GameObject[rowSize, colSize];
         }
-        double rowWidthUnit = calculateRowWidth(colSize) + screenMarginLeft + screenMarginRight;
+        double rowWidthUnit = calculateDimension(colSize) + screenMarginLeft + screenMarginRight;
         double unitScale = CameraFit.SCREEN_WIDTH / rowWidthUnit;
         for (int row = 0; row < rowSize; row++)
         {

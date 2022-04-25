@@ -10,12 +10,9 @@ public class MainPixelsHolder : MonoBehaviour, PanListener
     private PixelsSpawner spawner;
 
     private bool isPixelsSpawned = false;
-    private double colWidth = 0.0;
-    private double zoomLevel = 0.0;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         panDetector.panListener = this;
         spawner = GetComponent<PixelsSpawner>();
         spawner.onSpawned += OnPixelsSpawned;
@@ -31,8 +28,6 @@ public class MainPixelsHolder : MonoBehaviour, PanListener
     }
 
     private void OnPixelsSpawned() {
-        colWidth = spawner.calculateRowWidth();
-        zoomLevel = this.transform.localScale.magnitude / 1.0;
         isPixelsSpawned = true;
     }
 

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PinchDetection : MonoBehaviour
@@ -32,29 +31,48 @@ public class PinchDetection : MonoBehaviour
 	private void ZoomEnd() {
 		StopCoroutine(zoomCoroutine);
 	}
+
 	IEnumerator ZoomDetection() {
-		float previousDistance = 0f, distance = 0f;
+		float originalDistance = 0f;
+		Vector3? originalPosition = null;
+		float originalScaleMagnitude = 0f;
+		Vector3? originalScaleNormalized = null;
+		Vector3? newPositionOffset = null;
+		float distance = 0f;
 		while(true) {
-			distance = Vector2.Distance(controls.PinchtoZoom.PrimaryFingerPosition.ReadValue<Vector2>(), controls.PinchtoZoom.SecondaryFingerPosition.ReadValue<Vector2>());
-			// Detection
-			// Zoom Out
-			if(previousDistance > 0f) {
-				// Factor < 0 when we are zooming in. (Fingers get closer to each other)
-				// Factor > 0 when are zooming out. (Fingers go far from each other)
-				float factor = distance / previousDistance;
-				Vector3 oldScale = go.transform.localScale;
+			var primaryFingerPosition = controls.PinchtoZoom.PrimaryFingerPosition.ReadValue<Vector2>();
+			var secondaryFingerPosition = controls.PinchtoZoom.SecondaryFingerPosition.ReadValue<Vector2>();
+			distance = Vector2.Distance(primaryFingerPosition, secondaryFingerPosition);
+			if (originalDistance == 0f) {
+				originalDistance = distance;
+				originalScaleMagnitude = go.transform.localScale.magnitude;
+				originalScaleNormalized = go.transform.localScale.normalized;
+				originalPosition = go.transform.localPosition;
+				var primaryFingerPositionOnScreen = Camera.main.ScreenPointToRay(primaryFingerPosition).origin;
+				var secondaryFingerPositionOnScreen = Camera.main.ScreenPointToRay(secondaryFingerPosition).origin;
+				var tempVector = (primaryFingerPositionOnScreen + secondaryFingerPositionOnScreen) / 2.0f;
+				var centerOfTwoFingers = new Vector3(tempVector.x, tempVector.y, transform.localPosition.z);
+				newPositionOffset = centerOfTwoFingers - originalPosition;
+			} else {
+				//// Applying scale
+				// Factor < 1 when we are zooming in. (Fingers get closer to each other)
+				// Factor > 1 when are zooming out. (Fingers go far from each other)
+				float factor = distance / originalDistance;
 				// Short for: factor + ((factor - 1f) * (speed - 1f))
-				Vector3 newScale = oldScale * (factor * speed - speed + 1);
-				float newScaleMagnitude = newScale.magnitude;
-				if(newScaleMagnitude < minScale) {
-					go.transform.localScale = newScale.normalized * minScale;
-				} else if(newScaleMagnitude > maxScale) {
-					go.transform.localScale = Vector3.ClampMagnitude(newScale, maxScale);
-				} else if(newScaleMagnitude > minScale && newScaleMagnitude < maxScale) {
-					go.transform.localScale = newScale;
-				}
+				float mappedFactor = factor * speed - speed + 1;
+				float newScaleMagnitude = originalScaleMagnitude * mappedFactor;
+				float clampedScale = 0f;
+
+				if (newScaleMagnitude < minScale) clampedScale = minScale;
+				else if (newScaleMagnitude > maxScale) clampedScale = maxScale;
+				else clampedScale = newScaleMagnitude;
+
+				if(clampedScale != newScaleMagnitude) {
+					mappedFactor *= clampedScale / newScaleMagnitude;
+                }
+				go.transform.localScale = ((Vector3) originalScaleNormalized) * clampedScale;
+				go.transform.localPosition = (Vector3) originalPosition + (Vector3) newPositionOffset * (1 - mappedFactor);
 			}
-			previousDistance = distance;
 			yield return null;
 		}
 	}
