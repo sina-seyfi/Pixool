@@ -1,14 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public abstract class PixelData {
 	public int X { get; set; } = -1;
 	public int Y { get; set; } = -1;
 }
 public class PixelColor: PixelData {
-	public Color32 Color { protected set; get; }
-	public PixelColor(Color32 Color) {
+	public Game.Color Color { protected set; get; }
+	public PixelColor(Game.Color Color) {
 		this.Color = Color;
 	}
 }
@@ -31,6 +27,6 @@ public class PixelWaiting : PixelData {
 	}
 }
 public class PixelShelf : PixelColor {
-	public bool IsSelected { get; set; }
-	public PixelShelf(Color32 Color) : base(Color) { }
+	public bool IsSelected { get; set; } = false;
+	public PixelShelf(Game.Color Color) : base(Color) { }
 }

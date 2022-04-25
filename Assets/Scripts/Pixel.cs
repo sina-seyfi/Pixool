@@ -68,13 +68,13 @@ public class Pixel : MonoBehaviour
 				isBoxColliderEnabled = true;
 				getSpriteRenderer().color = Color.white;
 				getOverlaySpriteRenderer().sprite = empty;
-				getOverlaySpriteRenderer().color = pw.PixelColor.Color;
+				getOverlaySpriteRenderer().color = pw.PixelColor.Color.ToColor32();
 				break;
 			}
 			case PixelShelf ps: {
 				spLayer = LAYER_SHELF;
 				isBoxColliderEnabled = true;
-				getSpriteRenderer().color = ps.Color;
+				getSpriteRenderer().color = ps.Color.ToColor32();
 				if(ps.IsSelected){
 					spOverlayLayer = LAYER_SHELF;
 					var luminance = Utils.calculateLuminance(ps.Color);
@@ -88,7 +88,7 @@ public class Pixel : MonoBehaviour
 			}
 			case PixelColor pc: {
 				spLayer = LAYER_PIXELS;
-				getSpriteRenderer().color = pc.Color;
+				getSpriteRenderer().color = pc.Color.ToColor32();
 				break;
 			}
 		}
