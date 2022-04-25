@@ -919,7 +919,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0fb0d626d51b242b5a02fef9e2428b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.4
+  speed: 1
   minScale: 0.5
   maxScale: 16
   go: {fileID: 325000957}
