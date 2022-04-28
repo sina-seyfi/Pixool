@@ -12,7 +12,11 @@ public class Pixel : MonoBehaviour
 	[SerializeField]
 	private BoxCollider boxCollider;
 	[SerializeField]
+	private Sprite pixel;
+	[SerializeField]
 	private Sprite empty;
+	[SerializeField]
+	private Sprite waiting;
 	[SerializeField]
 	private Sprite selected;
 	[SerializeField]
@@ -56,24 +60,22 @@ public class Pixel : MonoBehaviour
 		switch(data) {
 			case PixelEmpty: {
 				spLayer = LAYER_PIXELS;
-				spOverlayLayer = LAYER_PIXELS;
-				getSpriteRenderer().color = Color.white;
-				getOverlaySpriteRenderer().sprite = empty;
-				getOverlaySpriteRenderer().color = Color.black;
+				getSpriteRenderer().sprite = empty;
 				break;
 			}
 			case PixelWaiting pw: {
 				spLayer = LAYER_PIXELS;
 				spOverlayLayer = LAYER_PIXELS;
 				isBoxColliderEnabled = true;
-				getSpriteRenderer().color = Color.white;
-				getOverlaySpriteRenderer().sprite = empty;
+				getSpriteRenderer().sprite = empty;
+				getOverlaySpriteRenderer().sprite = waiting;
 				getOverlaySpriteRenderer().color = pw.PixelColor.Color.ToColor32();
 				break;
 			}
 			case PixelShelf ps: {
 				spLayer = LAYER_SHELF;
 				isBoxColliderEnabled = true;
+				getSpriteRenderer().sprite = pixel;
 				getSpriteRenderer().color = ps.Color.ToColor32();
 				if(ps.IsSelected){
 					spOverlayLayer = LAYER_SHELF;
@@ -88,6 +90,7 @@ public class Pixel : MonoBehaviour
 			}
 			case PixelColor pc: {
 				spLayer = LAYER_PIXELS;
+				getSpriteRenderer().sprite = pixel;
 				getSpriteRenderer().color = pc.Color.ToColor32();
 				break;
 			}

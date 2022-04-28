@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawFromTop: 0
-  gap: 0.20000000298023224
+  gap: 0
   screenMarginLeft: 10
   screenMarginRight: 10
   pixelPrefab: {fileID: 6412027887607555936, guid: 89be276fa0220c84da6214f3d0eb1d62, type: 3}
