@@ -231,7 +231,9 @@ MonoBehaviour:
   srBase: {fileID: 1306074942657982379}
   srOverlay: {fileID: 4685962369882151216}
   boxCollider: {fileID: 4081273302564063126}
-  empty: {fileID: 21300000, guid: 8a81e0fd5959adb4d81921070e61b63b, type: 3}
+  pixel: {fileID: 21300000, guid: b2e259f9821b1ea4ca5f2ee8fe19b937, type: 3}
+  empty: {fileID: 21300000, guid: fd026360ab46c044cab0da98b24157fe, type: 3}
+  waiting: {fileID: 21300000, guid: 90c830b59abf8a04391cef9c381a832a, type: 3}
   selected: {fileID: 21300000, guid: 3c7cf057188354ea482da82a3566d6b7, type: 3}
   ClickHandler: {fileID: 1055474276357292590}
 --- !u!65 &4081273302564063126
